@@ -1,0 +1,33 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Derived from this package's own `requires-python`. Hardcoding a shared matrix
+        # across packages is what turned kvprobe red: the runner installed 3.9 against a
+        # package declaring >=3.10, and pip refused before a single test ran.
+        python-version: ["3.9", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          # pytest is installed EXPLICITLY, not only via the [dev] extra. pip treats an
+          # unknown extra as a warning, not an error, so a package missing [dev] used to
+          # install nothing and fail later with "No module named pytest" -- a confusing
+          # red that looks like a broken test rather than a broken install.
+          python -m pip install pytest
+          python -m pip install -e .
+      - name: Test
+        run: python -m pytest -q

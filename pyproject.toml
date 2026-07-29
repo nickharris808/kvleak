@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kvleak"
+version = "0.1.0"
+description = "Does your LLM serving stack leak between tenants? A black-box scanner that refuses to report a null it cannot interpret."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+keywords = ["llm", "security", "multi-tenant", "kv-cache", "prefix-caching", "vllm", "sglang"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Security",
+]
+dependencies = []          # the residency analysis is pure arithmetic; the live probe uses urllib
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+kvleak = "kvleak.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.cold_install]
+smoke = ["selftest"]

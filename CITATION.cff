@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: "kvleak: cross-tenant leak scanner"
+abstract: >-
+  cross-tenant leak scanner
+authors:
+  - family-names: Harris
+    given-names: Nick
+repository-code: "https://github.com/nickharris808/kvleak"
+url: "https://github.com/nickharris808/kvleak"
+license: Apache-2.0
+type: software
+keywords:
+  - verification
+  - abstention
+  - reproducibility
