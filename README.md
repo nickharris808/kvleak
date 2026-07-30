@@ -10,9 +10,13 @@ A black-box scanner for cross-caller prefix reuse on multi-tenant LLM serving st
 thing these probes usually lack: **a residency precondition that refuses to report a null it
 cannot interpret.**
 
+**Not yet on PyPI.** The command below is the one that works today. It installs from this repository, pinned to a tag.
+
 ```bash
-pip install kvleak
+pip install "git+https://github.com/nickharris808/kvleak@v0.1.0"
 ```
+
+`pip install kvleak` is the intended command once the name is published. **It 404s today**, which is why it is not the first step above. The tag is pinned rather than `@main` so a reader installs the exact code this README documents.
 
 ## The bug in every such test, including ours
 
@@ -64,9 +68,13 @@ does not check will hand you a clean bill of health for a system that is leaking
 
 ## Install
 
+**Not yet on PyPI.** The command below is the one that works today. It installs from this repository, pinned to a tag.
+
 ```bash
-pip install kvleak          # zero runtime dependencies
+pip install "git+https://github.com/nickharris808/kvleak@v0.1.0"
 ```
+
+`pip install kvleak` is the intended command once the name is published. **It 404s today**, which is why it is not the first step above. The tag is pinned rather than `@main` so a reader installs the exact code this README documents.
 
 ## 30-second quickstart
 
