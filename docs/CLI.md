@@ -64,12 +64,25 @@ options:
 
 ```
 usage: kvleak scan [-h] [--engine {vllm,sglang}] [--base-url BASE_URL]
-                   [--include-unfixed]
+                   [--model MODEL] [--api-key API_KEY]
+                   [--identity-header HEADER] [--tokens TOKENS]
+                   [--timeout TIMEOUT] [--json] [--include-unfixed]
 
 options:
   -h, --help            show this help message and exit
   --engine {vllm,sglang}
   --base-url BASE_URL
+  --model MODEL         model name the endpoint serves
+  --api-key API_KEY
+  --identity-header HEADER
+                        header your deployment keys caller identity on (e.g.
+                        X-Tenant-Id). Without it, victim and attacker reach
+                        the server as the same caller and the probe is
+                        meaningless.
+  --tokens TOKENS       prefix length; must stay resident — check with `kvleak
+                        residency`
+  --timeout TIMEOUT
+  --json
   --include-unfixed     enable probe 4, which automates an UNFIXED upstream
                         defect
 ```
@@ -99,5 +112,5 @@ options:
 
 ## The rest of the portfolio
 
-This tool is one of 19. See the README's portfolio table, or
+This tool is one of 20. See the README's portfolio table, or
 <https://github.com/nickharris808>.

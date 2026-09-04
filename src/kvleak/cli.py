@@ -94,10 +94,41 @@ def _cmd_scan(a) -> int:
         print("Run `kvleak residency ...` first: it needs no endpoint and tells you whether a")
         print("scan on this model and cache budget could produce an interpretable result at all.")
         return 2
-    print("\nLive probing is not performed in this build: the HTTP probe path is deliberately")
-    print("not exercised without an endpoint, and this tool refuses to print a result it did")
-    print("not measure. See README 'Live scanning' for the supported harness.")
-    return 2
+    from .driver import DriverError, Endpoint, readings_to_counts, run_reuse_probe
+    from .probes import evaluate_reuse
+
+    ep = Endpoint(base_url=a.base_url, model=a.model, api_key=a.api_key,
+                  identity_header=a.identity_header, timeout_s=a.timeout)
+    if not ep.identity_header and not ep.api_key:
+        print("\nABSTAIN — no --identity-header and no --api-key, so the 'victim' and the "
+              "'attacker' would reach the server as the SAME caller.", file=sys.stderr)
+        print("  A cross-tenant zero measured that way is meaningless: nothing distinguished the "
+              "two callers. Supply the header your deployment keys identity on.", file=sys.stderr)
+        return 2
+
+    print(f"  model ........ {a.model}")
+    print(f"  identity via . {a.identity_header or 'API key'}")
+    print(f"  probe tokens . {a.tokens}\n")
+    try:
+        readings = run_reuse_probe(ep, tokens=a.tokens)
+    except DriverError as e:
+        print(f"ABSTAIN — nothing was measured.\n  {e}", file=sys.stderr)
+        return 2
+
+    for k, r in readings.items():
+        print(f"  {k:<20} cached {str(r.cached_tokens):>6} of {r.prompt_tokens:>6} prompt tokens "
+              f"({r.latency_ms:>7.0f} ms)")
+    counts = readings_to_counts(readings)
+    result = evaluate_reuse(**counts)
+    print(f"\n  {result.outcome} — {result.detail}")
+    for name, reading in result.controls.items():
+        print(f"    {name:<22} {reading}")
+    if a.json:
+        print(json.dumps({"artifact": "kvleak_scan", "engine": a.engine, "model": a.model,
+                          "readings": {k: vars(v) for k, v in readings.items()},
+                          "result": result.as_dict()}, indent=2, default=str))
+    # 1 = a leak was found; 2 = we could not tell. Never 0 unless isolation actually held.
+    return {"LEAK": 1, "CLEAN": 0, "INCONCLUSIVE": 2, "SKIPPED": 2}[result.outcome]
 
 
 def _cmd_selftest(a) -> int:
@@ -173,6 +204,17 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("scan", help="live cross-tenant probe (needs an endpoint)")
     s.add_argument("--engine", choices=["vllm", "sglang"], default="vllm")
     s.add_argument("--base-url")
+    s.add_argument("--model", default="gpt-3.5-turbo",
+                   help="model name the endpoint serves")
+    s.add_argument("--api-key")
+    s.add_argument("--identity-header", metavar="HEADER",
+                   help="header your deployment keys caller identity on (e.g. X-Tenant-Id). "
+                        "Without it, victim and attacker reach the server as the same caller and "
+                        "the probe is meaningless.")
+    s.add_argument("--tokens", type=int, default=1800,
+                   help="prefix length; must stay resident — check with `kvleak residency`")
+    s.add_argument("--timeout", type=float, default=120.0)
+    s.add_argument("--json", action="store_true")
     s.add_argument("--include-unfixed", action="store_true",
                    help="enable probe 4, which automates an UNFIXED upstream defect")
     s.set_defaults(fn=_cmd_scan)
