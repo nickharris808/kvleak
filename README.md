@@ -496,7 +496,7 @@ underlying observations — uninterpretable rows included — are published as
 
 kvleak tells you whether your stack leaks. **It does not fix it.** Binding a partition key to an
 authenticated principal at the admission decision, the ordered composite key, and the separator
-hardening are all covered by filed claims and are not distributed here. See
+hardening are all covered by patent claims drafted (filing status available on request) and are not distributed here. See
 [`CLAIMS-MAP.md`](CLAIMS-MAP.md).
 
 That is stated plainly rather than coyly because you should know what you are getting before you run
@@ -582,7 +582,7 @@ running `--help` on every published command.
 
 Everything above is **measure-only** and Apache-2.0: it tells you what is true and never acts on
 it. The **enforcement** side — binding a partition key at the admission decision, the compiled gate
-corpus, and the certificate-*issuing* faucet — is covered by filed patents and licensed separately.
+corpus, and the certificate-*issuing* faucet — is licensed separately; patent claims drafted, filing status available on request.
 
 **Reading is free. Enforcing is licensed.**
 <!-- /PORTFOLIO -->
