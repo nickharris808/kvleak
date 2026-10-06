@@ -6,7 +6,7 @@ This file exists so the CLEAN tag is *auditable* rather than asserted.
 
 ## The line
 
-The filed families nearest to this tool are the partition-binding ones. Their independent claims
+The claim families nearest to this tool are the partition-binding ones. Their independent claims
 terminate in:
 
 > *"…**binding** the derived partition key to the authenticated principal at the admission
@@ -20,7 +20,7 @@ and refuses nothing.
 
 ## Claims approached, and the step not performed
 
-| Filed claim family | What it recites | What kvleak does instead |
+| Drafted claim family | What it recites | What kvleak does instead |
 |---|---|---|
 | Partition-key binding at admission | deriving a key from an authenticated principal; folding it into the cache lookup; **serving or refusing cached state on the result** | Detects that a stack does *not* do this. Performs no derivation, no binding, and no serve/refuse. |
 | Source-tagged ordered composite key + separator hardening | constructing an ordered composite key over tagged sources so distinct sources cannot collide, and **admitting a reuse decision** on it | Probe 3 checks whether observed reuse *conforms to the engine's documented quantisation*. It constructs no key and admits no decision. |
