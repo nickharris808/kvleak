@@ -496,7 +496,7 @@ underlying observations — uninterpretable rows included — are published as
 
 kvleak tells you whether your stack leaks. **It does not fix it.** Binding a partition key to an
 authenticated principal at the admission decision, the ordered composite key, and the separator
-hardening are all covered by patent claims drafted (filing status available on request) and are not distributed here. See
+hardening are the subject of drafted patent claims (filing status available on request) and are not distributed here. See
 [`CLAIMS-MAP.md`](CLAIMS-MAP.md).
 
 That is stated plainly rather than coyly because you should know what you are getting before you run
